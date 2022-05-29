@@ -27,6 +27,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 #     && apt-get -y install --no-install-recommends <your-package-list-here>
 
+# install Agda
 RUN apt-get -y install --no-install-recommends zlib1g-dev libncurses5-dev
 
 USER ${USERNAME}
@@ -37,3 +38,15 @@ RUN cabal v2-update \
  && cabal v2-install Agda
 
 ENV PATH="/home/${USERNAME}/.cabal/bin:${PATH}"
+
+# install Agda's stdlib
+
+RUN mkdir ~/.agda-libraries \
+ && wget -O /tmp/agda-stdlib.tar https://github.com/agda/agda-stdlib/archive/v1.7.1.tar.gz \
+ && tar -zxvf /tmp/agda-stdlib.tar --directory ~/.agda-libraries \
+ && mkdir ~/.agda \
+ && echo ~/.agda-libraries/agda-stdlib-1.7.1/standard-library.agda-lib > ~/.agda/libraries
+
+# install a dependency for this development
+
+RUN cabal v2-install BNFC

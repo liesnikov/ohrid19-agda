@@ -19,8 +19,11 @@
       // Add the IDs of extensions you want installed when the container is created.
       "extensions": [
         "banacorn.agda-mode"
-      ]
-    }
+      ],
+      "settings": {
+        "agdaMode.connection.agdaPath": "~/.cabal/bin/agda"
+      }
+      }
   },
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
