@@ -111,6 +111,21 @@ echo standard-library >> $HOME/.agda/defaults
 cabal install BNFC
 ```
 
+
+### Installing using Docker
+
+You'll need `docker` and `docker-compose`. Installation instructions:
+
+* https://docs.docker.com/get-docker/
+* https://docs.docker.com/compose/install/
+
+Or you can install Docker Desktop: https://www.docker.com/products/docker-desktop/
+
+For editor, you'll need VSCode: https://code.visualstudio.com/
+with an extension: [Remote -- Containers Extension](vscode:extension/ms-vscode-remote.remote-containers) (alternatively, use [this link](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers&WT.mc_id=devcloud-11496-buhollan))
+
+
+
 Exercises
 ---------
 
