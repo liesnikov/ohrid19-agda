@@ -124,6 +124,7 @@ Or you can install Docker Desktop: https://www.docker.com/products/docker-deskto
 For editor, you'll need VSCode: https://code.visualstudio.com/
 with an extension: [Remote -- Containers Extension](vscode:extension/ms-vscode-remote.remote-containers) (alternatively, use [this link](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers&WT.mc_id=devcloud-11496-buhollan))
 
+*FIXME* : you have to change agda-path in the agda-mode extension to "/home/vscode/.cabal/bin/agda".
 
 
 Exercises
