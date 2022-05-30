@@ -272,4 +272,4 @@ See [`V1/UntypedInterpreter.agda`]( ../src/V1/html/V1.UntypedInterpreter.html)
 * Download the code with `git clone https://github.com/liesnikov/pl-group-retreat-workshop-2022`
 * Load the code in VSCode
 * Choose a language construct (e.g. negation `~` or minus `-`).  
-  Add it to [`V1/AST.agda`](../src/V1/html/V1.AST.html) and [`V1/UntypedInterpreter.agda`](../src/V1/html/V1.UntypedInterpreter.html)
+  Add it to [`V2/AST.agda`](../src/V2/html/V2.AST.html) and [`V2/UntypedInterpreter.agda`](../src/V2/html/V2.UntypedInterpreter.html)
