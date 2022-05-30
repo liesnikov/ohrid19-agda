@@ -1,4 +1,4 @@
-
+{-# OPTIONS --guardedness #-}
 record Stream (A : Set) : Set where
   coinductive
   field
@@ -32,3 +32,4 @@ open import Data.Nat using (ℕ)
 
 injectℕ : ℕ → Coℕ
 injectℕ x = {!!}
+ 
