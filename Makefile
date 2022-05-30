@@ -12,6 +12,6 @@ test :
 	make -C test
 
 parser :
-	make -C src parser
+	make -C src/V3 parser
 
 # EOF

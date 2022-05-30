@@ -27,7 +27,7 @@ test : runwhile
 	make -C ../../test
 
 parser : $(parser)
-	./$(parser) ../test/gcd.c
+	./$(parser) ../../test/gcd.c
 
 html : $(agdafiles)
 	$(agda) -i.. --html $<
