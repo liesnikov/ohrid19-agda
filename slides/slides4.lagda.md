@@ -300,7 +300,7 @@ We combine both effects in the `Exec` monad.
   execPrg : ∀ {i} (prg : Program) → Delay i ℤ
   execPrg prg = ⋯
 ```
-See [V3/Interpreter.agda](https://jespercockx.github.io/ohrid19-agda/src/V3/html/V3.Interpreter.html) for full code.
+See [V3/Interpreter.agda](../src/V3/html/V3.Interpreter.html) for full code.
 
 ## Exercise
 

@@ -1,4 +1,4 @@
-Agda course at EUTYPES Summer School '19 in Ohrid
+Agda course PL retreat 2022
 =================================================
 
 What is Agda?

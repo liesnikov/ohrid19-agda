@@ -102,7 +102,7 @@ We will need:
 * Docker Desktop: [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop/)
 * VSCode: [code.visualstudio.com](https://code.visualstudio.com/)
 * Clone this repo:  
-  `git clone https://github.com/liesnikov/ohrid19-agda`  
+  `git clone https://github.com/liesnikov/liesnikov/pl-group-retreat-workshop-2022`
 
 ## Working with files
 
@@ -268,7 +268,7 @@ See [`V1/UntypedInterpreter.agda`]( ../src/V1/html/V1.UntypedInterpreter.html)
 
 ## Practical part:
 
-* Download the code with `git clone https://github.com/liesnikov/ohrid19-agda`
+* Download the code with `git clone https://github.com/liesnikov/pl-group-retreat-workshop-2022`
 * Load the code in VSCode
 * Choose a language construct (e.g. negation `~` or minus `-`).  
   Add it to [`V1/AST.agda`](../src/V1/html/V1.AST.html) and [`V1/UntypedInterpreter.agda`](../src/V1/html/V1.UntypedInterpreter.html)
