@@ -39,7 +39,7 @@ You'll need docker installed locally for this. Towards that end, there are two o
 * You can install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 * Or you can install [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/).
 
-For editor, you'll need VSCode: [code.visualstudio.com](https://code.visualstudio.com/) and to install [Remote Containers](vscode:extension/ms-vscode-remote.remote-containers) extension.
+For editor, you'll need VSCode: [code.visualstudio.com](https://code.visualstudio.com/) and to install <a href="vscode:extension/ms-vscode-remote.remote-containers" > Remote Containers </a> extension.
 
 Once everything is installed, open this folder in VSCode.
 You should see a popup "Folder contains a Dev Container configuration file". Press "Reopen in Container" button. Wait for the image to be pulled and you should be all set.
