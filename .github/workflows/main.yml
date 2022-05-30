@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'containerize'
-      - 'main'
 
 jobs:
   docker:
@@ -23,6 +22,6 @@ jobs:
         with:
           context: "{{defaultContext}}:.devcontainer"
           push: true
-          tags: ghcr.io/liesnikov/group-wokrshop:latest
+          tags: ghcr.io/liesnikov/group-workshop:latest
           cache-from: type=registry,ref=ghcr.io/liesnikov/group-workshop:buildcache
           cache-to: type=registry,ref=ghcr.io/liesnikov/group-workshop:buildcache,mode=max
