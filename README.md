@@ -112,16 +112,16 @@ cabal install BNFC
 ```
 
 
-### Installing using Docker
+### Installation using Docker
 
-You'll need `docker` and `docker-compose`. Installation instructions:
-
-* https://docs.docker.com/get-docker/
-* https://docs.docker.com/compose/install/
-
-Or you can install Docker Desktop: https://www.docker.com/products/docker-desktop/
+You'll need docker installed locally for this. Towards that end, there are two options:
+* You can install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+* Or you can install [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/).
 
 For editor, you'll need VSCode: https://code.visualstudio.com/
+
+Once everything is installed, open this folder in VSCode.
+You should see a popup "Folder contains a Dev Container configuration file". Press "Reopen in Container" button. Wait for the image to be pulled and you should be all set.
 
 Exercises
 ---------
