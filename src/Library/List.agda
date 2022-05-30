@@ -13,7 +13,7 @@ open import Relation.Nullary
 module Library.List where
 
 open import Data.List.Base public using (List; []; _∷_; foldl)
-open import Data.List.All public using (All; []; _∷_) hiding (module All)
+open import Data.List.Relation.Unary.All public using (All; []; _∷_) hiding (module All)
 
 -- Non-dependent association lists
 
