@@ -25,6 +25,7 @@ tomorrow."
 
 <!--
 ```
+{-# OPTIONS --guardedness #-}
 open import Library
 ```
 -->

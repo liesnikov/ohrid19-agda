@@ -174,7 +174,7 @@ Pattern matching allows typechecker to learn new facts!
 
 ## Type-checking expressions
 
-See [V1/TypeChecker.agda](https://jespercockx.github.io/ohrid19-agda/src/html/V1/V1.TypeChecker.html).
+See [V3/TypeChecker.agda](https://jespercockx.github.io/ohrid19-agda/src/html/V3/V3.TypeChecker.html).
 
 Exercise: extend the typechecker with rules for the new syntactic constructions you added before
 
