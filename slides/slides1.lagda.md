@@ -101,6 +101,7 @@ We will need:
 
 * Docker Desktop: [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop/)
 * VSCode: [code.visualstudio.com](https://code.visualstudio.com/)
+* Install [Remote Containers](vscode:extension/ms-vscode-remote.remote-containers) extension.
 * Clone this repo:  
   `git clone https://github.com/liesnikov/liesnikov/pl-group-retreat-workshop-2022`
 
