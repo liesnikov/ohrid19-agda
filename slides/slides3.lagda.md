@@ -1,9 +1,9 @@
 
 ---
 title: "Correct-by-construction programming in Agda"
-subtitle: "Lecture 3: Side effects, type classes, and monads"
-author: "Jesper Cockx"
-date: "2 September 2019"
+subtitle: "Part 3: Side effects, type classes, and monads"
+author: "Jesper Cockx, Bohdan Liesnikov"
+date: "31 May 2022"
 
 transition: "linear"
 center: "false"
@@ -15,53 +15,17 @@ margin: "0.2"
 
 # Type classes
 
-## What is a type class?
-
-A type class offers one or more functions for a **generic** type. **Examples**:
-
-- `Print A`:
-  * `print : A → String`
-- `Monoid M` type class:
-  * `∅ : M`
-  * `_+_ : M → M → M`
-- `Eq A`:
-  * `_==_ : A → A → Bool` and/or `_≟_ : (x y : A) -> Dec (x ≡ y)`
-- `Functor F`:
-  * `fmap : {A B : Set} → F A → F B`
-
-## Parametric vs ad-hoc overloading
-
-Why not have `print : {A : Set} -> A -> String`?
-
-. . .
-
-Because of *parametricity*, `print` would have to be a constant function.
-
-Type classes allow a *different* implementation at each type!
-
 ## Type classes in Agda
 
-A type class is implemented by using a **record type** + **instance arguments**
+A type class offers one or more functions for a **generic** type.
+A type class is implemented by using a **record type** + **instance arguments**.
+For example, `Print A`:
 
-- Record type: a **dictionary** holding implementation of each function for a specific type
-- Instance arguments: *automatically* pick the 'right' dictionary for the given type
+  * `print : A → String`
 
-## Instance arguments
+## Record type
 
-*Instance arguments* are Agda's builtin mechanism for
- ad-hoc overloading (~ type classes in Haskell).
-
-Syntax:
-
-- Using an instance: `{{x : A}} → ...`
-- Defining new instances: `instance ...`
-
-When using a function of type `{{x : A}} → B`, Agda will automatically
-resolve the argument if there is a **unique** instance of the
-right type in scope.
-
-
-## Defining a typeclass with instance arguments
+Record type is a **dictionary** holding implementation of each function for a specific type
 
 <!--
 ```agda
@@ -70,13 +34,17 @@ open import Data.Bool.Base
 open import Data.String.Base
 ```
 -->
-
 ```agda
 record Print {ℓ} (A : Set ℓ) : Set ℓ where
   field
     print : A → String
 open Print {{...}}  -- print : {{r : Print A}} → A → String
+```
 
+## Instance arguments
+Instance arguments *automatically* pick the 'right' dictionary for the given type
+
+```agda
 instance
   PrintBool : Print Bool
   print {{PrintBool}} true  = "true"
@@ -84,20 +52,20 @@ instance
 
   PrintString : Print String
   print {{PrintString}} x = x
+```
 
+## Using type classes in Agda
+
+When using a function of type `{{x : A}} → B`, Agda will automatically
+resolve the argument if there is a **unique** instance of the
+right type in scope.
+
+```agda
 testPrint : String
 testPrint = (print true) ++ (print "a string")
 ```
 
 # Monads
-
-##
-
-"To be is to do" --Socrates
-
-"To do is to be" --Sartre
-
-"Do be do be do" --Sinatra.
 
 ## Side effects in a pure language
 
@@ -109,19 +77,13 @@ But a typechecker has many side effects:
 - read or write files
 - maintain a state for declared variables
 
-## Monads
+How does one use Monads in Agda?
 
-`Monad` is a typeclass with two fields `return` and `_>>=_`.
-
-`M A` ~ "computations that may have some side-effects (depending on M) and return an A"
-
-Examples: `Maybe`, `Reader`, `Error`, `State`, ...
-
-See [Library/Error.agda](https://jespercockx.github.io/ohrid19-agda/src/html/Library.Error.html)
+See [Library/Error.agda](../src/html/Library.Error.html)
 
 ## `do` notation
 
-`do` is syntactic sugar for repeated binds: instead of
+The syntax for `do`-notation is just about what you're used to.
 
 <!--
 ```
@@ -132,13 +94,6 @@ module _ where
 ```
 -->
 
-```
-  _ : Maybe ℤ
-  _ = (just (-[1+ 3 ])) >>= λ x →
-      (just (+ 5)     ) >>= λ y →
-      return (x + y)
-```
-you can write:
 ```
   _ : Maybe ℤ
   _ = do
@@ -174,7 +129,7 @@ Pattern matching allows typechecker to learn new facts!
 
 ## Type-checking expressions
 
-See [V3/TypeChecker.agda](https://jespercockx.github.io/ohrid19-agda/src/html/V3/V3.TypeChecker.html).
+See [V3/TypeChecker.agda](../src/html/V3/V3.TypeChecker.html).
 
 Exercise: extend the typechecker with rules for the new syntactic constructions you added before
 
@@ -226,11 +181,10 @@ record IMonad {I : Set} (M : I → I → Set → Set) : Set₁ where
 
 Examples:
 
-- `TCDecl` monad (see [V2/TypeChecker.agda](https://jespercockx.github.io/ohrid19-agda/src/html/V2/V2.TypeChecker.html)).
-- `Exec` monad (see [V3/Interpreter.agda](https://jespercockx.github.io/ohrid19-agda/src/html/V3/V3.TypeChecker.html)).
+- `TCDecl` monad (see [V2/TypeChecker.agda](../src/html/V2/V2.TypeChecker.html)).
+- `Exec` monad (see [V3/Interpreter.agda](../src/html/V3/V3.TypeChecker.html)).
 
 # Haskell FFI
-
 
 ## Why use an FFI?
 
@@ -306,7 +260,7 @@ BNFC is a Haskell library for generating Haskell code from a grammar:
 - Parser
 - Pretty-printer
 
-See [While.cf](https://jespercockx.github.io/ohrid19-agda/src/V1/While.cf) for the grammar of WHILE.
+See [While.cf](../src/V1/While.cf) for the grammar of WHILE.
 
 ## Exercises
 
@@ -314,9 +268,9 @@ Extend the typechecker and the BNFC grammar with the new syntactic
 constructions you added.
 
 Don't forget to update the Haskell bindings in
-[AST.agda](https://jespercockx.github.io/ohrid19-agda/src/V1/html/V1.AST.html)!
+[AST.agda](../src/V1/html/V1.AST.html)!
 
 Running the test suite:
 
-­ `make parser`: compile the parser and run it on [/test/gcd.c](https://jespercockx.github.io/ohrid19-agda/test/gcd.c).
-- `make test`: compile the whole typechecker and run it on the examples in `/test`
+* `make parser`: compile the parser and run it on [/test/gcd.c](../test/gcd.c).
+* `make test`: compile the whole typechecker and run it on the examples in `/test`

@@ -1,9 +1,9 @@
 
 ---
 title: "Correct-by-construction programming in Agda"
-subtitle: "Lecture 1: Getting started with Agda"
-author: "Jesper Cockx"
-date: "31 August 2019"
+subtitle: "Part 1: Getting started with Agda"
+author: "Jesper Cockx, Bohdan Liesnikov"
+date: "31 May 2022"
 
 transition: "linear"
 center: "false"
@@ -14,43 +14,15 @@ margin: "0.2"
 
 # Correct-by-construction programming
 
-
-##
-
-"A computer will do what you tell it to do, but that may be much different from what you had in mind."
-
---Joseph Weizenbaum
-
-##
-
-"Program testing can be used to show the presence of bugs, but never to show their absence!"
-
---Edsger Dijkstra
-
-##
-
-"That is the very purpose of declarative programming – to make it more likely that we mean what we say by improving our ability to say what we mean."
-
---Conor McBride
-
-## Why use dependent types?
-
-With dependent types, we can **statically verify** that a program
-satisfies a given correctness property.
-
-Verification is **built into** the language itself.
-
 ## Two approaches to verification with dependent types:
 
-- **Extrinsic approach**: first write the program and then prove
-    correctness
-- **Intrinsic approach**: first define the *type* of programs that
-  satisfy the correctness property and then write the program that
-  inhabits this type
+- **Extrinsic approach**
+- **Intrinsic approach**
 
-The intrinsic approach is also called **correct-by-construction** programming.
+## Extrinsic verification
 
-## Example of extrinsic verification
+first write the program and then prove correctness:
+
 <!--
 ```agda
 postulate
@@ -80,7 +52,9 @@ module Intro where
     sort-is-sorted = ⋯
 ```
 
-## Example of intrinsic verification
+## Intrinsic verification
+
+first define the *type* of programs that satisfy the correctness property and then write the program that inhabits this type
 
 ```agda
   module Intrinsic where
@@ -91,14 +65,7 @@ module Intro where
     sort = ⋯
 ```
 
-## Correct-by-construction programming
-
-Building invariants into the *types* of our program, to make it
-**impossible** to write an incorrect program in the first place.
-
-. . .
-
-No proving required!
+Also called **correct-by-construction** programming. We will be using this approach.
 
 ## Running example
 
@@ -119,64 +86,33 @@ int main () {
 
 ## Overview of this course
 
-* **Lecture 1**: Getting started with Agda
-* **Lecture 2**: Indexed datatypes and dependent pattern matching
-* **Lecture 3**: Writing Agda programs that run
+* **Part 1**: Getting started with Agda
+* **Part 2**: Indexed datatypes and dependent pattern matching
+* **Part 3**: Writing Agda programs that run
   - instance arguments
   - do notation
   - Haskell FFI
-* **Lecture 4**: (Non-)termination
-  - termination checker
-  - coinduction
-  - sized types
 
 # Introduction to Agda
 
-## What is Agda?
-
-Agda is...
-
-1. A strongly typed functional programming language in the tradition
-   of Haskell
-2. An interactive theorem prover in the tradition of Martin-Löf
-
-We will mostly use 1. in this course.
-
 ## Installation
 
-For this tutorial, you will need to install **Agda**, the **Agda standard library**, and the **BNFC** tool.
+We will need:
 
-- Agda: [github.com/agda/agda](https://github.com/agda/agda)
-- Agda standard library: [github.com/agda/agda-stdlib](https://github.com/agda/agda-stdlib)
-- BNFC: [github.com/BNFC/bnfc](https://github.com/BNFC/bnfc)
+* Docker Desktop: [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop/)
+* VSCode: [code.visualstudio.com](https://code.visualstudio.com/)
+* Clone this repo:  
+  `git clone https://github.com/liesnikov/ohrid19-agda`  
 
-Installation instructions:
-```bash
-git clone https://github.com/jespercockx/ohrid19-agda
-cd ohrid19-agda
-./setup.sh
-```
+## Working with files
 
-## Main features of Agda
+* Open this folder in VSCode.
+* You should see a popup "Folder contains a Dev Container configuration file".  
+  Press "Reopen in Container" button.
+* If you pulled the image before it should take a couple of seconds.  
+  Otherwise wait a little while for the download of the docker image.
 
-- Dependent types
-- Indexed datatypes and dependent pattern matching
-- Termination checking and productivity checking
-- A universe hierachy with universe polymorphism
-- Implicit arguments
-- Parametrized modules (~ ML functors)
-
-## Other lesser well-known features of Agda
-
-- Record types with copattern matching
-- Coinductive datatypes
-- Sized types
-- Instance arguments (~ Haskell's typeclasses)
-- A FFI to Haskell
-
-We will use many of these in the course of this tutorial!
-
-## Emacs mode for Agda
+## VSCode mode for Agda
 
 Basic commands:
 
@@ -195,7 +131,7 @@ Programs may contain **holes** (? or {! !}).
 
 ## Unicode input
 
-Agda's Emacs mode interprets many latex-like commands as unicode symbols:
+Agda's mode interprets many latex-like commands as unicode symbols:
 
 - `\lambda` = `λ`
 - `\forall` = `∀`
@@ -205,7 +141,7 @@ Agda's Emacs mode interprets many latex-like commands as unicode symbols:
 - `\::` = `∷`
 - `\bN` = `ℕ`, `\bZ` = `ℤ`, ...
 
-To get information about specific character, use `M-x describe-char`
+To get information about specific character, use `C-x C-=`
 
 # Demo time!
 
@@ -260,7 +196,6 @@ f′ = λ where
   true  → false
   false → true
 ```
-
 
 ## Testing functions using the identity type
 
@@ -329,12 +264,11 @@ eval : Exp → Maybe Val
 eval = ⋯
 ```
 
-See [`V1/UntypedInterpreter.agda`]( https://github.com/jespercockx/ohrid19-agda/src/V1/html/V1.UntypedInterpreter.html)
+See [`V1/UntypedInterpreter.agda`]( ../src/V1/html/V1.UntypedInterpreter.html)
 
-## Exercises
+## Practical part:
 
-* Install Agda and download the code with `git clone https://github.com/jespercockx/ohrid19-agda`
-* Load the code in Emacs
-* Choose a language construct (e.g. `~` or `-`) and add it to `AST.agda` and `UntypedInterpreter.agda`
-
-See also [https://jespercockx.github.io/ohrid19-agda/](https://jespercockx.github.io/ohrid19-agda/)
+* Download the code with `git clone https://github.com/liesnikov/ohrid19-agda`
+* Load the code in VSCode
+* Choose a language construct (e.g. negation `~` or minus `-`).  
+  Add it to [`V1/AST.agda`](../src/V1/html/V1.AST.html) and [`V1/UntypedInterpreter.agda`](../src/V1/html/V1.UntypedInterpreter.html)

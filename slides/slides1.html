@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <meta name="author" content="Jesper Cockx">
-  <meta name="dcterms.date" content="2019-08-31">
+  <meta name="author" content="Jesper Cockx, Bohdan Liesnikov">
+  <meta name="dcterms.date" content="2022-05-31">
   <title>Correct-by-construction programming in Agda</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -101,75 +101,55 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <section id="title-slide">
   <h1 class="title">Correct-by-construction programming in Agda</h1>
-  <p class="subtitle">Lecture 1: Getting started with Agda</p>
-  <p class="author">Jesper Cockx</p>
-  <p class="date">31 August 2019</p>
+  <p class="subtitle">Part 1: Getting started with Agda</p>
+  <p class="author">Jesper Cockx, Bohdan Liesnikov</p>
+  <p class="date">31 May 2022</p>
 </section>
 
-<section><section id="correct-by-construction-programming" class="title-slide slide level1"><h1>Correct-by-construction programming</h1></section><section id="section" class="slide level2">
-<h2></h2>
-<p>“A computer will do what you tell it to do, but that may be much different from what you had in mind.”</p>
-<p>–Joseph Weizenbaum</p>
-</section><section id="section-1" class="slide level2">
-<h2></h2>
-<p>“Program testing can be used to show the presence of bugs, but never to show their absence!”</p>
-<p>–Edsger Dijkstra</p>
-</section><section id="section-2" class="slide level2">
-<h2></h2>
-<p>“That is the very purpose of declarative programming – to make it more likely that we mean what we say by improving our ability to say what we mean.”</p>
-<p>–Conor McBride</p>
-</section><section id="why-use-dependent-types" class="slide level2">
-<h2>Why use dependent types?</h2>
-<p>With dependent types, we can <strong>statically verify</strong> that a program satisfies a given correctness property.</p>
-<p>Verification is <strong>built into</strong> the language itself.</p>
-</section><section id="two-approaches-to-verification-with-dependent-types" class="slide level2">
+<section><section id="correct-by-construction-programming" class="title-slide slide level1"><h1>Correct-by-construction programming</h1></section><section id="two-approaches-to-verification-with-dependent-types" class="slide level2">
 <h2>Two approaches to verification with dependent types:</h2>
 <ul>
-<li><strong>Extrinsic approach</strong>: first write the program and then prove correctness</li>
-<li><strong>Intrinsic approach</strong>: first define the <em>type</em> of programs that satisfy the correctness property and then write the program that inhabits this type</li>
+<li><strong>Extrinsic approach</strong></li>
+<li><strong>Intrinsic approach</strong></li>
 </ul>
-<p>The intrinsic approach is also called <strong>correct-by-construction</strong> programming.</p>
-</section><section id="example-of-extrinsic-verification" class="slide level2">
-<h2>Example of extrinsic verification</h2>
+</section><section id="extrinsic-verification" class="slide level2">
+<h2>Extrinsic verification</h2>
+<p>first write the program and then prove correctness:</p>
 <!--
-<pre class="Agda"><a id="1310" class="Keyword">postulate</a>
-  <a id="⋯"></a><a id="1322" href="slides1.html#1322" class="Postulate">⋯</a> <a id="1324" class="Symbol">:</a> <a id="1326" class="Symbol">∀</a> <a id="1328" class="Symbol">{</a><a id="1329" href="slides1.html#1329" class="Bound">ℓ</a><a id="1330" class="Symbol">}</a> <a id="1332" class="Symbol">{</a><a id="1333" href="slides1.html#1333" class="Bound">A</a> <a id="1335" class="Symbol">:</a> <a id="1337" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="1341" href="slides1.html#1329" class="Bound">ℓ</a><a id="1342" class="Symbol">}</a> <a id="1344" class="Symbol">→</a> <a id="1346" href="slides1.html#1333" class="Bound">A</a>
+<pre class="Agda"><a id="491" class="Keyword">postulate</a>
+  <a id="⋯"></a><a id="503" href="slides1.html#503" class="Postulate">⋯</a> <a id="505" class="Symbol">:</a> <a id="507" class="Symbol">∀</a> <a id="509" class="Symbol">{</a><a id="510" href="slides1.html#510" class="Bound">ℓ</a><a id="511" class="Symbol">}</a> <a id="513" class="Symbol">{</a><a id="514" href="slides1.html#514" class="Bound">A</a> <a id="516" class="Symbol">:</a> <a id="518" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="522" href="slides1.html#510" class="Bound">ℓ</a><a id="523" class="Symbol">}</a> <a id="525" class="Symbol">→</a> <a id="527" href="slides1.html#514" class="Bound">A</a>
 
-<a id="1349" class="Keyword">module</a> <a id="Intro"></a><a id="1356" href="slides1.html#1356" class="Module">Intro</a> <a id="1362" class="Keyword">where</a>
-  <a id="1370" class="Keyword">open</a> <a id="1375" class="Keyword">import</a> <a id="1382" href="Data.Bool.Base.html" class="Module">Data.Bool.Base</a> <a id="1397" class="Keyword">using</a> <a id="1403" class="Symbol">(</a><a id="1404" href="Agda.Builtin.Bool.html#163" class="Datatype">Bool</a><a id="1408" class="Symbol">;</a> <a id="1410" href="Agda.Builtin.Bool.html#188" class="InductiveConstructor">true</a><a id="1414" class="Symbol">;</a> <a id="1416" href="Agda.Builtin.Bool.html#182" class="InductiveConstructor">false</a><a id="1421" class="Symbol">)</a>
-  <a id="1425" class="Keyword">open</a> <a id="1430" class="Keyword">import</a> <a id="1437" href="Data.Char.Base.html" class="Module">Data.Char.Base</a> <a id="1452" class="Keyword">using</a> <a id="1458" class="Symbol">(</a><a id="1459" href="Agda.Builtin.Char.html#227" class="Postulate">Char</a><a id="1463" class="Symbol">)</a>
-  <a id="1467" class="Keyword">open</a> <a id="1472" class="Keyword">import</a> <a id="1479" href="Data.Integer.Base.html" class="Module">Data.Integer.Base</a> <a id="1497" class="Keyword">using</a> <a id="1503" class="Symbol">(</a><a id="1504" href="Agda.Builtin.Int.html#246" class="Datatype">ℤ</a><a id="1505" class="Symbol">)</a>
-  <a id="1509" class="Keyword">open</a> <a id="1514" class="Keyword">import</a> <a id="1521" href="Data.List.Base.html" class="Module">Data.List.Base</a> <a id="1536" class="Keyword">using</a> <a id="1542" class="Symbol">(</a><a id="1543" href="Agda.Builtin.List.html#148" class="Datatype">List</a><a id="1547" class="Symbol">;</a> <a id="1549" href="Data.List.Base.html#10383" class="InductiveConstructor">[]</a><a id="1551" class="Symbol">;</a> <a id="1553" href="Agda.Builtin.List.html#200" class="InductiveConstructor Operator">_∷_</a><a id="1556" class="Symbol">)</a>
-  <a id="1560" class="Keyword">open</a> <a id="1565" class="Keyword">import</a> <a id="1572" href="Data.Maybe.Base.html" class="Module">Data.Maybe.Base</a> <a id="1588" class="Keyword">using</a> <a id="1594" class="Symbol">(</a><a id="1595" href="Agda.Builtin.Maybe.html#136" class="Datatype">Maybe</a><a id="1600" class="Symbol">;</a> <a id="1602" href="Agda.Builtin.Maybe.html#195" class="InductiveConstructor">nothing</a><a id="1609" class="Symbol">;</a> <a id="1611" href="Agda.Builtin.Maybe.html#174" class="InductiveConstructor">just</a><a id="1615" class="Symbol">)</a>
-  <a id="1619" class="Keyword">open</a> <a id="1624" class="Keyword">import</a> <a id="1631" href="Data.Nat.Base.html" class="Module">Data.Nat.Base</a> <a id="1645" class="Keyword">using</a> <a id="1651" class="Symbol">(</a><a id="1652" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a><a id="1653" class="Symbol">;</a> <a id="1655" href="Agda.Builtin.Nat.html#210" class="InductiveConstructor">zero</a><a id="1659" class="Symbol">;</a> <a id="1661" href="Agda.Builtin.Nat.html#223" class="InductiveConstructor">suc</a><a id="1664" class="Symbol">;</a> <a id="1666" href="Agda.Builtin.Nat.html#325" class="Primitive Operator">_+_</a><a id="1669" class="Symbol">;</a> <a id="1671" href="Agda.Builtin.Nat.html#528" class="Primitive Operator">_*_</a><a id="1674" class="Symbol">;</a> <a id="1676" href="Data.Nat.Base.html#1645" class="Function Operator">_&lt;_</a><a id="1679" class="Symbol">)</a>
-  <a id="1683" class="Keyword">open</a> <a id="1688" class="Keyword">import</a> <a id="1695" href="Data.Product.html" class="Module">Data.Product</a> <a id="1708" class="Keyword">using</a> <a id="1714" class="Symbol">(</a><a id="1715" href="Data.Product.html#1167" class="Function Operator">_×_</a><a id="1718" class="Symbol">;</a> <a id="1720" href="Agda.Builtin.Sigma.html#236" class="InductiveConstructor Operator">_,_</a><a id="1723" class="Symbol">)</a>
-  <a id="1727" class="Keyword">open</a> <a id="1732" class="Keyword">import</a> <a id="1739" href="Agda.Builtin.Equality.html" class="Module">Agda.Builtin.Equality</a> <a id="1761" class="Keyword">using</a> <a id="1767" class="Symbol">(</a><a id="1768" href="Agda.Builtin.Equality.html#151" class="Datatype Operator">_≡_</a><a id="1771" class="Symbol">;</a> <a id="1773" href="Agda.Builtin.Equality.html#208" class="InductiveConstructor">refl</a><a id="1777" class="Symbol">)</a>
+<a id="530" class="Keyword">module</a> <a id="Intro"></a><a id="537" href="slides1.html#537" class="Module">Intro</a> <a id="543" class="Keyword">where</a>
+  <a id="551" class="Keyword">open</a> <a id="556" class="Keyword">import</a> <a id="563" href="Data.Bool.Base.html" class="Module">Data.Bool.Base</a> <a id="578" class="Keyword">using</a> <a id="584" class="Symbol">(</a><a id="585" href="Agda.Builtin.Bool.html#163" class="Datatype">Bool</a><a id="589" class="Symbol">;</a> <a id="591" href="Agda.Builtin.Bool.html#188" class="InductiveConstructor">true</a><a id="595" class="Symbol">;</a> <a id="597" href="Agda.Builtin.Bool.html#182" class="InductiveConstructor">false</a><a id="602" class="Symbol">)</a>
+  <a id="606" class="Keyword">open</a> <a id="611" class="Keyword">import</a> <a id="618" href="Data.Char.Base.html" class="Module">Data.Char.Base</a> <a id="633" class="Keyword">using</a> <a id="639" class="Symbol">(</a><a id="640" href="Agda.Builtin.Char.html#227" class="Postulate">Char</a><a id="644" class="Symbol">)</a>
+  <a id="648" class="Keyword">open</a> <a id="653" class="Keyword">import</a> <a id="660" href="Data.Integer.Base.html" class="Module">Data.Integer.Base</a> <a id="678" class="Keyword">using</a> <a id="684" class="Symbol">(</a><a id="685" href="Agda.Builtin.Int.html#246" class="Datatype">ℤ</a><a id="686" class="Symbol">)</a>
+  <a id="690" class="Keyword">open</a> <a id="695" class="Keyword">import</a> <a id="702" href="Data.List.Base.html" class="Module">Data.List.Base</a> <a id="717" class="Keyword">using</a> <a id="723" class="Symbol">(</a><a id="724" href="Agda.Builtin.List.html#148" class="Datatype">List</a><a id="728" class="Symbol">;</a> <a id="730" href="Data.List.Base.html#10383" class="InductiveConstructor">[]</a><a id="732" class="Symbol">;</a> <a id="734" href="Agda.Builtin.List.html#200" class="InductiveConstructor Operator">_∷_</a><a id="737" class="Symbol">)</a>
+  <a id="741" class="Keyword">open</a> <a id="746" class="Keyword">import</a> <a id="753" href="Data.Maybe.Base.html" class="Module">Data.Maybe.Base</a> <a id="769" class="Keyword">using</a> <a id="775" class="Symbol">(</a><a id="776" href="Agda.Builtin.Maybe.html#136" class="Datatype">Maybe</a><a id="781" class="Symbol">;</a> <a id="783" href="Agda.Builtin.Maybe.html#195" class="InductiveConstructor">nothing</a><a id="790" class="Symbol">;</a> <a id="792" href="Agda.Builtin.Maybe.html#174" class="InductiveConstructor">just</a><a id="796" class="Symbol">)</a>
+  <a id="800" class="Keyword">open</a> <a id="805" class="Keyword">import</a> <a id="812" href="Data.Nat.Base.html" class="Module">Data.Nat.Base</a> <a id="826" class="Keyword">using</a> <a id="832" class="Symbol">(</a><a id="833" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a><a id="834" class="Symbol">;</a> <a id="836" href="Agda.Builtin.Nat.html#210" class="InductiveConstructor">zero</a><a id="840" class="Symbol">;</a> <a id="842" href="Agda.Builtin.Nat.html#223" class="InductiveConstructor">suc</a><a id="845" class="Symbol">;</a> <a id="847" href="Agda.Builtin.Nat.html#325" class="Primitive Operator">_+_</a><a id="850" class="Symbol">;</a> <a id="852" href="Agda.Builtin.Nat.html#528" class="Primitive Operator">_*_</a><a id="855" class="Symbol">;</a> <a id="857" href="Data.Nat.Base.html#1645" class="Function Operator">_&lt;_</a><a id="860" class="Symbol">)</a>
+  <a id="864" class="Keyword">open</a> <a id="869" class="Keyword">import</a> <a id="876" href="Data.Product.html" class="Module">Data.Product</a> <a id="889" class="Keyword">using</a> <a id="895" class="Symbol">(</a><a id="896" href="Data.Product.html#1167" class="Function Operator">_×_</a><a id="899" class="Symbol">;</a> <a id="901" href="Agda.Builtin.Sigma.html#236" class="InductiveConstructor Operator">_,_</a><a id="904" class="Symbol">)</a>
+  <a id="908" class="Keyword">open</a> <a id="913" class="Keyword">import</a> <a id="920" href="Agda.Builtin.Equality.html" class="Module">Agda.Builtin.Equality</a> <a id="942" class="Keyword">using</a> <a id="948" class="Symbol">(</a><a id="949" href="Agda.Builtin.Equality.html#151" class="Datatype Operator">_≡_</a><a id="952" class="Symbol">;</a> <a id="954" href="Agda.Builtin.Equality.html#208" class="InductiveConstructor">refl</a><a id="958" class="Symbol">)</a>
 </pre>-->
-<pre class="Agda">  <a id="1798" class="Keyword">module</a> <a id="Intro.Extrinsic"></a><a id="1805" href="slides1.html#1805" class="Module">Extrinsic</a> <a id="1815" class="Keyword">where</a>
-    <a id="Intro.Extrinsic.sort"></a><a id="1825" href="slides1.html#1825" class="Function">sort</a> <a id="1830" class="Symbol">:</a> <a id="1832" href="Agda.Builtin.List.html#148" class="Datatype">List</a> <a id="1837" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a> <a id="1839" class="Symbol">→</a> <a id="1841" href="Agda.Builtin.List.html#148" class="Datatype">List</a> <a id="1846" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a>
-    <a id="1852" href="slides1.html#1825" class="Function">sort</a> <a id="1857" class="Symbol">=</a> <a id="1859" href="slides1.html#1322" class="Postulate">⋯</a>
+<pre class="Agda">  <a id="979" class="Keyword">module</a> <a id="Intro.Extrinsic"></a><a id="986" href="slides1.html#986" class="Module">Extrinsic</a> <a id="996" class="Keyword">where</a>
+    <a id="Intro.Extrinsic.sort"></a><a id="1006" href="slides1.html#1006" class="Function">sort</a> <a id="1011" class="Symbol">:</a> <a id="1013" href="Agda.Builtin.List.html#148" class="Datatype">List</a> <a id="1018" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a> <a id="1020" class="Symbol">→</a> <a id="1022" href="Agda.Builtin.List.html#148" class="Datatype">List</a> <a id="1027" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a>
+    <a id="1033" href="slides1.html#1006" class="Function">sort</a> <a id="1038" class="Symbol">=</a> <a id="1040" href="slides1.html#503" class="Postulate">⋯</a>
 
-    <a id="Intro.Extrinsic.IsSorted"></a><a id="1866" href="slides1.html#1866" class="Function">IsSorted</a> <a id="1875" class="Symbol">:</a> <a id="1877" href="Agda.Builtin.List.html#148" class="Datatype">List</a> <a id="1882" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a> <a id="1884" class="Symbol">→</a> <a id="1886" href="Agda.Primitive.html#326" class="Primitive">Set</a>
-    <a id="1894" href="slides1.html#1866" class="Function">IsSorted</a> <a id="1903" class="Symbol">=</a> <a id="1905" href="slides1.html#1322" class="Postulate">⋯</a>
+    <a id="Intro.Extrinsic.IsSorted"></a><a id="1047" href="slides1.html#1047" class="Function">IsSorted</a> <a id="1056" class="Symbol">:</a> <a id="1058" href="Agda.Builtin.List.html#148" class="Datatype">List</a> <a id="1063" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a> <a id="1065" class="Symbol">→</a> <a id="1067" href="Agda.Primitive.html#326" class="Primitive">Set</a>
+    <a id="1075" href="slides1.html#1047" class="Function">IsSorted</a> <a id="1084" class="Symbol">=</a> <a id="1086" href="slides1.html#503" class="Postulate">⋯</a>
 
-    <a id="Intro.Extrinsic.sort-is-sorted"></a><a id="1912" href="slides1.html#1912" class="Function">sort-is-sorted</a> <a id="1927" class="Symbol">:</a> <a id="1929" class="Symbol">∀</a> <a id="1931" href="slides1.html#1931" class="Bound">xs</a> <a id="1934" class="Symbol">→</a> <a id="1936" href="slides1.html#1866" class="Function">IsSorted</a> <a id="1945" class="Symbol">(</a><a id="1946" href="slides1.html#1825" class="Function">sort</a> <a id="1951" href="slides1.html#1931" class="Bound">xs</a><a id="1953" class="Symbol">)</a>
-    <a id="1959" href="slides1.html#1912" class="Function">sort-is-sorted</a> <a id="1974" class="Symbol">=</a> <a id="1976" href="slides1.html#1322" class="Postulate">⋯</a>
+    <a id="Intro.Extrinsic.sort-is-sorted"></a><a id="1093" href="slides1.html#1093" class="Function">sort-is-sorted</a> <a id="1108" class="Symbol">:</a> <a id="1110" class="Symbol">∀</a> <a id="1112" href="slides1.html#1112" class="Bound">xs</a> <a id="1115" class="Symbol">→</a> <a id="1117" href="slides1.html#1047" class="Function">IsSorted</a> <a id="1126" class="Symbol">(</a><a id="1127" href="slides1.html#1006" class="Function">sort</a> <a id="1132" href="slides1.html#1112" class="Bound">xs</a><a id="1134" class="Symbol">)</a>
+    <a id="1140" href="slides1.html#1093" class="Function">sort-is-sorted</a> <a id="1155" class="Symbol">=</a> <a id="1157" href="slides1.html#503" class="Postulate">⋯</a>
 </pre>
-</section><section id="example-of-intrinsic-verification" class="slide level2">
-<h2>Example of intrinsic verification</h2>
-<pre class="Agda">  <a id="2031" class="Keyword">module</a> <a id="Intro.Intrinsic"></a><a id="2038" href="slides1.html#2038" class="Module">Intrinsic</a> <a id="2048" class="Keyword">where</a>
-    <a id="Intro.Intrinsic.SortedList"></a><a id="2058" href="slides1.html#2058" class="Function">SortedList</a> <a id="2069" class="Symbol">:</a> <a id="2071" href="Agda.Primitive.html#326" class="Primitive">Set</a>
-    <a id="2079" href="slides1.html#2058" class="Function">SortedList</a> <a id="2090" class="Symbol">=</a> <a id="2092" href="slides1.html#1322" class="Postulate">⋯</a>
+</section><section id="intrinsic-verification" class="slide level2">
+<h2>Intrinsic verification</h2>
+<p>first define the <em>type</em> of programs that satisfy the correctness property and then write the program that inhabits this type</p>
+<pre class="Agda">  <a id="1327" class="Keyword">module</a> <a id="Intro.Intrinsic"></a><a id="1334" href="slides1.html#1334" class="Module">Intrinsic</a> <a id="1344" class="Keyword">where</a>
+    <a id="Intro.Intrinsic.SortedList"></a><a id="1354" href="slides1.html#1354" class="Function">SortedList</a> <a id="1365" class="Symbol">:</a> <a id="1367" href="Agda.Primitive.html#326" class="Primitive">Set</a>
+    <a id="1375" href="slides1.html#1354" class="Function">SortedList</a> <a id="1386" class="Symbol">=</a> <a id="1388" href="slides1.html#503" class="Postulate">⋯</a>
 
-    <a id="Intro.Intrinsic.sort"></a><a id="2099" href="slides1.html#2099" class="Function">sort</a> <a id="2104" class="Symbol">:</a> <a id="2106" href="Agda.Builtin.List.html#148" class="Datatype">List</a> <a id="2111" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a> <a id="2113" class="Symbol">→</a> <a id="2115" href="slides1.html#2058" class="Function">SortedList</a>
-    <a id="2130" href="slides1.html#2099" class="Function">sort</a> <a id="2135" class="Symbol">=</a> <a id="2137" href="slides1.html#1322" class="Postulate">⋯</a>
+    <a id="Intro.Intrinsic.sort"></a><a id="1395" href="slides1.html#1395" class="Function">sort</a> <a id="1400" class="Symbol">:</a> <a id="1402" href="Agda.Builtin.List.html#148" class="Datatype">List</a> <a id="1407" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a> <a id="1409" class="Symbol">→</a> <a id="1411" href="slides1.html#1354" class="Function">SortedList</a>
+    <a id="1426" href="slides1.html#1395" class="Function">sort</a> <a id="1431" class="Symbol">=</a> <a id="1433" href="slides1.html#503" class="Postulate">⋯</a>
 </pre>
-</section><section id="correct-by-construction-programming-1" class="slide level2">
-<h2>Correct-by-construction programming</h2>
-<p>Building invariants into the <em>types</em> of our program, to make it <strong>impossible</strong> to write an incorrect program in the first place.</p>
-<div class="fragment">
-<p>No proving required!</p>
-</div>
+<p>Also called <strong>correct-by-construction</strong> programming. We will be using this approach.</p>
 </section><section id="running-example" class="slide level2">
 <h2>Running example</h2>
 <p>Implementation of a correct-by-construction <strong>typechecker</strong> + <strong>interpreter</strong> for a C-like language (WHILE)</p>
@@ -186,64 +166,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section><section id="overview-of-this-course" class="slide level2">
 <h2>Overview of this course</h2>
 <ul>
-<li><strong>Lecture 1</strong>: Getting started with Agda</li>
-<li><strong>Lecture 2</strong>: Indexed datatypes and dependent pattern matching</li>
-<li><strong>Lecture 3</strong>: Writing Agda programs that run
+<li><strong>Part 1</strong>: Getting started with Agda</li>
+<li><strong>Part 2</strong>: Indexed datatypes and dependent pattern matching</li>
+<li><strong>Part 3</strong>: Writing Agda programs that run
 <ul>
 <li>instance arguments</li>
 <li>do notation</li>
 <li>Haskell FFI</li>
 </ul></li>
-<li><strong>Lecture 4</strong>: (Non-)termination
-<ul>
-<li>termination checker</li>
-<li>coinduction</li>
-<li>sized types</li>
-</ul></li>
 </ul>
 </section></section>
-<section><section id="introduction-to-agda" class="title-slide slide level1"><h1>Introduction to Agda</h1></section><section id="what-is-agda" class="slide level2">
-<h2>What is Agda?</h2>
-<p>Agda is…</p>
-<ol type="1">
-<li>A strongly typed functional programming language in the tradition of Haskell</li>
-<li>An interactive theorem prover in the tradition of Martin-Löf</li>
-</ol>
-<p>We will mostly use 1. in this course.</p>
-</section><section id="installation" class="slide level2">
+<section><section id="introduction-to-agda" class="title-slide slide level1"><h1>Introduction to Agda</h1></section><section id="installation" class="slide level2">
 <h2>Installation</h2>
-<p>For this tutorial, you will need to install <strong>Agda</strong>, the <strong>Agda standard library</strong>, and the <strong>BNFC</strong> tool.</p>
+<p>We will need:</p>
 <ul>
-<li>Agda: <a href="https://github.com/agda/agda">github.com/agda/agda</a></li>
-<li>Agda standard library: <a href="https://github.com/agda/agda-stdlib">github.com/agda/agda-stdlib</a></li>
-<li>BNFC: <a href="https://github.com/BNFC/bnfc">github.com/BNFC/bnfc</a></li>
+<li>Docker Desktop: <a href="https://www.docker.com/products/docker-desktop/">docker.com/products/docker-desktop</a></li>
+<li>VSCode: <a href="https://code.visualstudio.com/">code.visualstudio.com</a></li>
+<li>Clone this repo:<br />
+<code>git clone https://github.com/liesnikov/ohrid19-agda</code></li>
 </ul>
-<p>Installation instructions:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1"><span class="fu">git</span> clone https://github.com/jespercockx/ohrid19-agda</a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="bu">cd</span> ohrid19-agda</a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="ex">./setup.sh</span></a></code></pre></div>
-</section><section id="main-features-of-agda" class="slide level2">
-<h2>Main features of Agda</h2>
+</section><section id="working-with-files" class="slide level2">
+<h2>Working with files</h2>
 <ul>
-<li>Dependent types</li>
-<li>Indexed datatypes and dependent pattern matching</li>
-<li>Termination checking and productivity checking</li>
-<li>A universe hierachy with universe polymorphism</li>
-<li>Implicit arguments</li>
-<li>Parametrized modules (~ ML functors)</li>
+<li>Open this folder in VSCode.</li>
+<li>You should see a popup “Folder contains a Dev Container configuration file”.<br />
+Press “Reopen in Container” button.</li>
+<li>If you pulled the image before it should take a couple of seconds.<br />
+Otherwise wait a little while for the download of the docker image.</li>
 </ul>
-</section><section id="other-lesser-well-known-features-of-agda" class="slide level2">
-<h2>Other lesser well-known features of Agda</h2>
-<ul>
-<li>Record types with copattern matching</li>
-<li>Coinductive datatypes</li>
-<li>Sized types</li>
-<li>Instance arguments (~ Haskell’s typeclasses)</li>
-<li>A FFI to Haskell</li>
-</ul>
-<p>We will use many of these in the course of this tutorial!</p>
-</section><section id="emacs-mode-for-agda" class="slide level2">
-<h2>Emacs mode for Agda</h2>
+</section><section id="vscode-mode-for-agda" class="slide level2">
+<h2>VSCode mode for Agda</h2>
 <p>Basic commands:</p>
 <ul>
 <li><strong>C-c C-l</strong>: typecheck and highlight the current file</li>
@@ -263,7 +215,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 </section><section id="unicode-input" class="slide level2">
 <h2>Unicode input</h2>
-<p>Agda’s Emacs mode interprets many latex-like commands as unicode symbols:</p>
+<p>Agda’s mode interprets many latex-like commands as unicode symbols:</p>
 <ul>
 <li><code>\lambda</code> = <code>λ</code></li>
 <li><code>\forall</code> = <code>∀</code></li>
@@ -273,107 +225,107 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><code>\::</code> = <code>∷</code></li>
 <li><code>\bN</code> = <code>ℕ</code>, <code>\bZ</code> = <code>ℤ</code>, …</li>
 </ul>
-<p>To get information about specific character, use <code>M-x describe-char</code></p>
+<p>To get information about specific character, use <code>C-x C-=</code></p>
 </section></section>
 <section><section id="demo-time" class="title-slide slide level1"><h1>Demo time!</h1></section><section id="data-types" class="slide level2">
 <h2>Data types</h2>
 <!--
-<pre class="Agda"><a id="5021" class="Keyword">module</a> <a id="datatypes"></a><a id="5028" href="slides1.html#5028" class="Module">datatypes</a> <a id="5038" class="Keyword">where</a>
+<pre class="Agda"><a id="3504" class="Keyword">module</a> <a id="datatypes"></a><a id="3511" href="slides1.html#3511" class="Module">datatypes</a> <a id="3521" class="Keyword">where</a>
 </pre>-->
-<pre class="Agda">  <a id="5059" class="Keyword">data</a> <a id="datatypes.Bool"></a><a id="5064" href="slides1.html#5064" class="Datatype">Bool</a> <a id="5069" class="Symbol">:</a> <a id="5071" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="5075" class="Keyword">where</a>
-    <a id="datatypes.Bool.true"></a><a id="5085" href="slides1.html#5085" class="InductiveConstructor">true</a>  <a id="5091" class="Symbol">:</a> <a id="5093" href="slides1.html#5064" class="Datatype">Bool</a>
-    <a id="datatypes.Bool.false"></a><a id="5102" href="slides1.html#5102" class="InductiveConstructor">false</a> <a id="5108" class="Symbol">:</a> <a id="5110" href="slides1.html#5064" class="Datatype">Bool</a>
+<pre class="Agda">  <a id="3542" class="Keyword">data</a> <a id="datatypes.Bool"></a><a id="3547" href="slides1.html#3547" class="Datatype">Bool</a> <a id="3552" class="Symbol">:</a> <a id="3554" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="3558" class="Keyword">where</a>
+    <a id="datatypes.Bool.true"></a><a id="3568" href="slides1.html#3568" class="InductiveConstructor">true</a>  <a id="3574" class="Symbol">:</a> <a id="3576" href="slides1.html#3547" class="Datatype">Bool</a>
+    <a id="datatypes.Bool.false"></a><a id="3585" href="slides1.html#3585" class="InductiveConstructor">false</a> <a id="3591" class="Symbol">:</a> <a id="3593" href="slides1.html#3547" class="Datatype">Bool</a>
 
-  <a id="5118" class="Keyword">data</a> <a id="datatypes.ℕ"></a><a id="5123" href="slides1.html#5123" class="Datatype">ℕ</a> <a id="5125" class="Symbol">:</a> <a id="5127" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="5131" class="Keyword">where</a>
-    <a id="datatypes.ℕ.zero"></a><a id="5141" href="slides1.html#5141" class="InductiveConstructor">zero</a> <a id="5146" class="Symbol">:</a> <a id="5148" href="slides1.html#5123" class="Datatype">ℕ</a>
-    <a id="datatypes.ℕ.suc"></a><a id="5154" href="slides1.html#5154" class="InductiveConstructor">suc</a>  <a id="5159" class="Symbol">:</a> <a id="5161" class="Symbol">(</a><a id="5162" href="slides1.html#5162" class="Bound">n</a> <a id="5164" class="Symbol">:</a> <a id="5166" href="slides1.html#5123" class="Datatype">ℕ</a><a id="5167" class="Symbol">)</a> <a id="5169" class="Symbol">→</a> <a id="5171" href="slides1.html#5123" class="Datatype">ℕ</a>
+  <a id="3601" class="Keyword">data</a> <a id="datatypes.ℕ"></a><a id="3606" href="slides1.html#3606" class="Datatype">ℕ</a> <a id="3608" class="Symbol">:</a> <a id="3610" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="3614" class="Keyword">where</a>
+    <a id="datatypes.ℕ.zero"></a><a id="3624" href="slides1.html#3624" class="InductiveConstructor">zero</a> <a id="3629" class="Symbol">:</a> <a id="3631" href="slides1.html#3606" class="Datatype">ℕ</a>
+    <a id="datatypes.ℕ.suc"></a><a id="3637" href="slides1.html#3637" class="InductiveConstructor">suc</a>  <a id="3642" class="Symbol">:</a> <a id="3644" class="Symbol">(</a><a id="3645" href="slides1.html#3645" class="Bound">n</a> <a id="3647" class="Symbol">:</a> <a id="3649" href="slides1.html#3606" class="Datatype">ℕ</a><a id="3650" class="Symbol">)</a> <a id="3652" class="Symbol">→</a> <a id="3654" href="slides1.html#3606" class="Datatype">ℕ</a>
 </pre>
 <!--
-<pre class="Agda"><a id="5187" class="Keyword">open</a> <a id="5192" class="Keyword">import</a> <a id="5199" href="Data.Nat.html" class="Module">Data.Nat</a> <a id="5208" class="Keyword">using</a> <a id="5214" class="Symbol">(</a><a id="5215" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a><a id="5216" class="Symbol">;</a> <a id="5218" href="Agda.Builtin.Nat.html#210" class="InductiveConstructor">zero</a><a id="5222" class="Symbol">;</a> <a id="5224" href="Agda.Builtin.Nat.html#223" class="InductiveConstructor">suc</a><a id="5227" class="Symbol">)</a>
-<a id="5229" class="Keyword">open</a> <a id="5234" class="Keyword">import</a> <a id="5241" href="Data.Bool.html" class="Module">Data.Bool</a> <a id="5251" class="Keyword">using</a> <a id="5257" class="Symbol">(</a><a id="5258" href="Agda.Builtin.Bool.html#163" class="Datatype">Bool</a><a id="5262" class="Symbol">;</a> <a id="5264" href="Agda.Builtin.Bool.html#188" class="InductiveConstructor">true</a><a id="5268" class="Symbol">;</a> <a id="5270" href="Agda.Builtin.Bool.html#182" class="InductiveConstructor">false</a><a id="5275" class="Symbol">)</a>
+<pre class="Agda"><a id="3670" class="Keyword">open</a> <a id="3675" class="Keyword">import</a> <a id="3682" href="Data.Nat.html" class="Module">Data.Nat</a> <a id="3691" class="Keyword">using</a> <a id="3697" class="Symbol">(</a><a id="3698" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a><a id="3699" class="Symbol">;</a> <a id="3701" href="Agda.Builtin.Nat.html#210" class="InductiveConstructor">zero</a><a id="3705" class="Symbol">;</a> <a id="3707" href="Agda.Builtin.Nat.html#223" class="InductiveConstructor">suc</a><a id="3710" class="Symbol">)</a>
+<a id="3712" class="Keyword">open</a> <a id="3717" class="Keyword">import</a> <a id="3724" href="Data.Bool.html" class="Module">Data.Bool</a> <a id="3734" class="Keyword">using</a> <a id="3740" class="Symbol">(</a><a id="3741" href="Agda.Builtin.Bool.html#163" class="Datatype">Bool</a><a id="3745" class="Symbol">;</a> <a id="3747" href="Agda.Builtin.Bool.html#188" class="InductiveConstructor">true</a><a id="3751" class="Symbol">;</a> <a id="3753" href="Agda.Builtin.Bool.html#182" class="InductiveConstructor">false</a><a id="3758" class="Symbol">)</a>
 </pre>-->
 </section><section id="function-definitions" class="slide level2">
 <h2>Function definitions</h2>
-<pre class="Agda"><a id="_+_"></a><a id="5315" href="slides1.html#5315" class="Function Operator">_+_</a> <a id="5319" class="Symbol">:</a> <a id="5321" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a> <a id="5323" class="Symbol">→</a> <a id="5325" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a> <a id="5327" class="Symbol">→</a> <a id="5329" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a>
-<a id="5331" href="Agda.Builtin.Nat.html#210" class="InductiveConstructor">zero</a>  <a id="5337" href="slides1.html#5315" class="Function Operator">+</a> <a id="5339" href="slides1.html#5339" class="Bound">y</a> <a id="5341" class="Symbol">=</a> <a id="5343" href="slides1.html#5339" class="Bound">y</a>
-<a id="5345" href="Agda.Builtin.Nat.html#223" class="InductiveConstructor">suc</a> <a id="5349" href="slides1.html#5349" class="Bound">x</a> <a id="5351" href="slides1.html#5315" class="Function Operator">+</a> <a id="5353" href="slides1.html#5353" class="Bound">y</a> <a id="5355" class="Symbol">=</a> <a id="5357" href="Agda.Builtin.Nat.html#223" class="InductiveConstructor">suc</a> <a id="5361" class="Symbol">(</a><a id="5362" href="slides1.html#5349" class="Bound">x</a> <a id="5364" href="slides1.html#5315" class="Function Operator">+</a> <a id="5366" href="slides1.html#5353" class="Bound">y</a><a id="5367" class="Symbol">)</a>
+<pre class="Agda"><a id="_+_"></a><a id="3798" href="slides1.html#3798" class="Function Operator">_+_</a> <a id="3802" class="Symbol">:</a> <a id="3804" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a> <a id="3806" class="Symbol">→</a> <a id="3808" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a> <a id="3810" class="Symbol">→</a> <a id="3812" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a>
+<a id="3814" href="Agda.Builtin.Nat.html#210" class="InductiveConstructor">zero</a>  <a id="3820" href="slides1.html#3798" class="Function Operator">+</a> <a id="3822" href="slides1.html#3822" class="Bound">y</a> <a id="3824" class="Symbol">=</a> <a id="3826" href="slides1.html#3822" class="Bound">y</a>
+<a id="3828" href="Agda.Builtin.Nat.html#223" class="InductiveConstructor">suc</a> <a id="3832" href="slides1.html#3832" class="Bound">x</a> <a id="3834" href="slides1.html#3798" class="Function Operator">+</a> <a id="3836" href="slides1.html#3836" class="Bound">y</a> <a id="3838" class="Symbol">=</a> <a id="3840" href="Agda.Builtin.Nat.html#223" class="InductiveConstructor">suc</a> <a id="3844" class="Symbol">(</a><a id="3845" href="slides1.html#3832" class="Bound">x</a> <a id="3847" href="slides1.html#3798" class="Function Operator">+</a> <a id="3849" href="slides1.html#3836" class="Bound">y</a><a id="3850" class="Symbol">)</a>
 </pre>
 <p><strong>Note:</strong> underscores indicate argument positions for mixfix functions</p>
 </section><section id="pattern-matching-lambda" class="slide level2">
 <h2>Pattern-matching lambda</h2>
 A <em>pattern lambda</em> introduces an anonymous function:
-<pre class="Agda"><a id="f"></a><a id="5531" href="slides1.html#5531" class="Function">f</a> <a id="5533" class="Symbol">:</a> <a id="5535" href="Agda.Builtin.Bool.html#163" class="Datatype">Bool</a> <a id="5540" class="Symbol">→</a> <a id="5542" href="Agda.Builtin.Bool.html#163" class="Datatype">Bool</a>
-<a id="5547" href="slides1.html#5531" class="Function">f</a> <a id="5549" class="Symbol">=</a> <a id="5551" class="Symbol">λ</a> <a id="5553" class="Symbol">{</a> <a id="5555" href="Agda.Builtin.Bool.html#188" class="InductiveConstructor">true</a>  <a id="5561" class="Symbol">→</a> <a id="5563" href="Agda.Builtin.Bool.html#182" class="InductiveConstructor">false</a>
-      <a id="5575" class="Symbol">;</a> <a id="5577" href="Agda.Builtin.Bool.html#182" class="InductiveConstructor">false</a> <a id="5583" class="Symbol">→</a> <a id="5585" href="Agda.Builtin.Bool.html#188" class="InductiveConstructor">true</a>
-      <a id="5596" class="Symbol">}</a>
+<pre class="Agda"><a id="f"></a><a id="4014" href="slides1.html#4014" class="Function">f</a> <a id="4016" class="Symbol">:</a> <a id="4018" href="Agda.Builtin.Bool.html#163" class="Datatype">Bool</a> <a id="4023" class="Symbol">→</a> <a id="4025" href="Agda.Builtin.Bool.html#163" class="Datatype">Bool</a>
+<a id="4030" href="slides1.html#4014" class="Function">f</a> <a id="4032" class="Symbol">=</a> <a id="4034" class="Symbol">λ</a> <a id="4036" class="Symbol">{</a> <a id="4038" href="Agda.Builtin.Bool.html#188" class="InductiveConstructor">true</a>  <a id="4044" class="Symbol">→</a> <a id="4046" href="Agda.Builtin.Bool.html#182" class="InductiveConstructor">false</a>
+      <a id="4058" class="Symbol">;</a> <a id="4060" href="Agda.Builtin.Bool.html#182" class="InductiveConstructor">false</a> <a id="4066" class="Symbol">→</a> <a id="4068" href="Agda.Builtin.Bool.html#188" class="InductiveConstructor">true</a>
+      <a id="4079" class="Symbol">}</a>
 </pre>
 Alternative syntax:
-<pre class="Agda"><a id="f′"></a><a id="5626" href="slides1.html#5626" class="Function">f′</a> <a id="5629" class="Symbol">:</a> <a id="5631" href="Agda.Builtin.Bool.html#163" class="Datatype">Bool</a> <a id="5636" class="Symbol">→</a> <a id="5638" href="Agda.Builtin.Bool.html#163" class="Datatype">Bool</a>
-<a id="5643" href="slides1.html#5626" class="Function">f′</a> <a id="5646" class="Symbol">=</a> <a id="5648" class="Symbol">λ</a> <a id="5650" class="Keyword">where</a>
-  <a id="5658" href="Agda.Builtin.Bool.html#188" class="InductiveConstructor">true</a>  <a id="5664" class="Symbol">→</a> <a id="5666" href="Agda.Builtin.Bool.html#182" class="InductiveConstructor">false</a>
-  <a id="5674" href="Agda.Builtin.Bool.html#182" class="InductiveConstructor">false</a> <a id="5680" class="Symbol">→</a> <a id="5682" href="Agda.Builtin.Bool.html#188" class="InductiveConstructor">true</a>
+<pre class="Agda"><a id="f′"></a><a id="4109" href="slides1.html#4109" class="Function">f′</a> <a id="4112" class="Symbol">:</a> <a id="4114" href="Agda.Builtin.Bool.html#163" class="Datatype">Bool</a> <a id="4119" class="Symbol">→</a> <a id="4121" href="Agda.Builtin.Bool.html#163" class="Datatype">Bool</a>
+<a id="4126" href="slides1.html#4109" class="Function">f′</a> <a id="4129" class="Symbol">=</a> <a id="4131" class="Symbol">λ</a> <a id="4133" class="Keyword">where</a>
+  <a id="4141" href="Agda.Builtin.Bool.html#188" class="InductiveConstructor">true</a>  <a id="4147" class="Symbol">→</a> <a id="4149" href="Agda.Builtin.Bool.html#182" class="InductiveConstructor">false</a>
+  <a id="4157" href="Agda.Builtin.Bool.html#182" class="InductiveConstructor">false</a> <a id="4163" class="Symbol">→</a> <a id="4165" href="Agda.Builtin.Bool.html#188" class="InductiveConstructor">true</a>
 </pre>
 </section><section id="testing-functions-using-the-identity-type" class="slide level2">
 <h2>Testing functions using the identity type</h2>
 <p>The identity type <code>x ≡ y</code> is inhabited by <code>refl</code> iff <code>x</code> and <code>y</code> are (definitionally) equal.</p>
 <p>We can use this to write <em>checked</em> tests for our Agda functions!</p>
-<pre class="Agda"><a id="5903" class="Keyword">open</a> <a id="5908" class="Keyword">import</a> <a id="5915" href="Relation.Binary.PropositionalEquality.html" class="Module">Relation.Binary.PropositionalEquality</a> <a id="5953" class="Keyword">using</a> <a id="5959" class="Symbol">(</a><a id="5960" href="Agda.Builtin.Equality.html#151" class="Datatype Operator">_≡_</a><a id="5963" class="Symbol">;</a> <a id="5965" href="Agda.Builtin.Equality.html#208" class="InductiveConstructor">refl</a><a id="5969" class="Symbol">)</a>
+<pre class="Agda"><a id="4385" class="Keyword">open</a> <a id="4390" class="Keyword">import</a> <a id="4397" href="Relation.Binary.PropositionalEquality.html" class="Module">Relation.Binary.PropositionalEquality</a> <a id="4435" class="Keyword">using</a> <a id="4441" class="Symbol">(</a><a id="4442" href="Agda.Builtin.Equality.html#151" class="Datatype Operator">_≡_</a><a id="4445" class="Symbol">;</a> <a id="4447" href="Agda.Builtin.Equality.html#208" class="InductiveConstructor">refl</a><a id="4451" class="Symbol">)</a>
 
-<a id="testPlus"></a><a id="5972" href="slides1.html#5972" class="Function">testPlus</a> <a id="5981" class="Symbol">:</a> <a id="5983" class="Number">1</a> <a id="5985" href="slides1.html#5315" class="Function Operator">+</a> <a id="5987" class="Number">1</a> <a id="5989" href="Agda.Builtin.Equality.html#151" class="Datatype Operator">≡</a> <a id="5991" class="Number">2</a>
-<a id="5993" href="slides1.html#5972" class="Function">testPlus</a> <a id="6002" class="Symbol">=</a> <a id="6004" href="Agda.Builtin.Equality.html#208" class="InductiveConstructor">refl</a>
+<a id="testPlus"></a><a id="4454" href="slides1.html#4454" class="Function">testPlus</a> <a id="4463" class="Symbol">:</a> <a id="4465" class="Number">1</a> <a id="4467" href="slides1.html#3798" class="Function Operator">+</a> <a id="4469" class="Number">1</a> <a id="4471" href="Agda.Builtin.Equality.html#151" class="Datatype Operator">≡</a> <a id="4473" class="Number">2</a>
+<a id="4475" href="slides1.html#4454" class="Function">testPlus</a> <a id="4484" class="Symbol">=</a> <a id="4486" href="Agda.Builtin.Equality.html#208" class="InductiveConstructor">refl</a>
 </pre>
 </section><section id="parametrized-datatypes" class="slide level2">
 <h2>Parametrized datatypes</h2>
-<pre class="Agda"><a id="6045" class="Keyword">data</a> <a id="List"></a><a id="6050" href="slides1.html#6050" class="Datatype">List</a> <a id="6055" class="Symbol">(</a><a id="6056" href="slides1.html#6056" class="Bound">A</a> <a id="6058" class="Symbol">:</a> <a id="6060" href="Agda.Primitive.html#326" class="Primitive">Set</a><a id="6063" class="Symbol">)</a> <a id="6065" class="Symbol">:</a> <a id="6067" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="6071" class="Keyword">where</a>
-  <a id="List.[]"></a><a id="6079" href="slides1.html#6079" class="InductiveConstructor">[]</a>  <a id="6083" class="Symbol">:</a> <a id="6085" href="slides1.html#6050" class="Datatype">List</a> <a id="6090" href="slides1.html#6056" class="Bound">A</a>
-  <a id="List._∷_"></a><a id="6094" href="slides1.html#6094" class="InductiveConstructor Operator">_∷_</a> <a id="6098" class="Symbol">:</a> <a id="6100" href="slides1.html#6056" class="Bound">A</a> <a id="6102" class="Symbol">→</a> <a id="6104" href="slides1.html#6050" class="Datatype">List</a> <a id="6109" href="slides1.html#6056" class="Bound">A</a> <a id="6111" class="Symbol">→</a> <a id="6113" href="slides1.html#6050" class="Datatype">List</a> <a id="6118" href="slides1.html#6056" class="Bound">A</a>
+<pre class="Agda"><a id="4527" class="Keyword">data</a> <a id="List"></a><a id="4532" href="slides1.html#4532" class="Datatype">List</a> <a id="4537" class="Symbol">(</a><a id="4538" href="slides1.html#4538" class="Bound">A</a> <a id="4540" class="Symbol">:</a> <a id="4542" href="Agda.Primitive.html#326" class="Primitive">Set</a><a id="4545" class="Symbol">)</a> <a id="4547" class="Symbol">:</a> <a id="4549" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="4553" class="Keyword">where</a>
+  <a id="List.[]"></a><a id="4561" href="slides1.html#4561" class="InductiveConstructor">[]</a>  <a id="4565" class="Symbol">:</a> <a id="4567" href="slides1.html#4532" class="Datatype">List</a> <a id="4572" href="slides1.html#4538" class="Bound">A</a>
+  <a id="List._∷_"></a><a id="4576" href="slides1.html#4576" class="InductiveConstructor Operator">_∷_</a> <a id="4580" class="Symbol">:</a> <a id="4582" href="slides1.html#4538" class="Bound">A</a> <a id="4584" class="Symbol">→</a> <a id="4586" href="slides1.html#4532" class="Datatype">List</a> <a id="4591" href="slides1.html#4538" class="Bound">A</a> <a id="4593" class="Symbol">→</a> <a id="4595" href="slides1.html#4532" class="Datatype">List</a> <a id="4600" href="slides1.html#4538" class="Bound">A</a>
 
-<a id="6121" class="Keyword">data</a> <a id="Maybe"></a><a id="6126" href="slides1.html#6126" class="Datatype">Maybe</a> <a id="6132" class="Symbol">(</a><a id="6133" href="slides1.html#6133" class="Bound">A</a> <a id="6135" class="Symbol">:</a> <a id="6137" href="Agda.Primitive.html#326" class="Primitive">Set</a><a id="6140" class="Symbol">)</a> <a id="6142" class="Symbol">:</a> <a id="6144" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="6148" class="Keyword">where</a>
-  <a id="Maybe.nothing"></a><a id="6156" href="slides1.html#6156" class="InductiveConstructor">nothing</a> <a id="6164" class="Symbol">:</a> <a id="6166" href="slides1.html#6126" class="Datatype">Maybe</a> <a id="6172" href="slides1.html#6133" class="Bound">A</a>
-  <a id="Maybe.just"></a><a id="6176" href="slides1.html#6176" class="InductiveConstructor">just</a>    <a id="6184" class="Symbol">:</a> <a id="6186" href="slides1.html#6133" class="Bound">A</a> <a id="6188" class="Symbol">→</a> <a id="6190" href="slides1.html#6126" class="Datatype">Maybe</a> <a id="6196" href="slides1.html#6133" class="Bound">A</a>
+<a id="4603" class="Keyword">data</a> <a id="Maybe"></a><a id="4608" href="slides1.html#4608" class="Datatype">Maybe</a> <a id="4614" class="Symbol">(</a><a id="4615" href="slides1.html#4615" class="Bound">A</a> <a id="4617" class="Symbol">:</a> <a id="4619" href="Agda.Primitive.html#326" class="Primitive">Set</a><a id="4622" class="Symbol">)</a> <a id="4624" class="Symbol">:</a> <a id="4626" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="4630" class="Keyword">where</a>
+  <a id="Maybe.nothing"></a><a id="4638" href="slides1.html#4638" class="InductiveConstructor">nothing</a> <a id="4646" class="Symbol">:</a> <a id="4648" href="slides1.html#4608" class="Datatype">Maybe</a> <a id="4654" href="slides1.html#4615" class="Bound">A</a>
+  <a id="Maybe.just"></a><a id="4658" href="slides1.html#4658" class="InductiveConstructor">just</a>    <a id="4666" class="Symbol">:</a> <a id="4668" href="slides1.html#4615" class="Bound">A</a> <a id="4670" class="Symbol">→</a> <a id="4672" href="slides1.html#4608" class="Datatype">Maybe</a> <a id="4678" href="slides1.html#4615" class="Bound">A</a>
 </pre>
 </section><section id="parametrized-functions" class="slide level2">
 <h2>Parametrized functions</h2>
-<pre class="Agda"><a id="if_then_else_"></a><a id="6234" href="slides1.html#6234" class="Function Operator">if_then_else_</a> <a id="6248" class="Symbol">:</a> <a id="6250" class="Symbol">{</a><a id="6251" href="slides1.html#6251" class="Bound">A</a> <a id="6253" class="Symbol">:</a> <a id="6255" href="Agda.Primitive.html#326" class="Primitive">Set</a><a id="6258" class="Symbol">}</a> <a id="6260" class="Symbol">→</a> <a id="6262" href="Agda.Builtin.Bool.html#163" class="Datatype">Bool</a> <a id="6267" class="Symbol">→</a> <a id="6269" href="slides1.html#6251" class="Bound">A</a> <a id="6271" class="Symbol">→</a> <a id="6273" href="slides1.html#6251" class="Bound">A</a> <a id="6275" class="Symbol">→</a> <a id="6277" href="slides1.html#6251" class="Bound">A</a>
-<a id="6279" href="slides1.html#6234" class="Function Operator">if</a> <a id="6282" href="Agda.Builtin.Bool.html#182" class="InductiveConstructor">false</a> <a id="6288" href="slides1.html#6234" class="Function Operator">then</a> <a id="6293" href="slides1.html#6293" class="Bound">x</a> <a id="6295" href="slides1.html#6234" class="Function Operator">else</a> <a id="6300" href="slides1.html#6300" class="Bound">y</a> <a id="6302" class="Symbol">=</a> <a id="6304" href="slides1.html#6300" class="Bound">y</a>
-<a id="6306" href="slides1.html#6234" class="Function Operator">if</a> <a id="6309" href="Agda.Builtin.Bool.html#188" class="InductiveConstructor">true</a>  <a id="6315" href="slides1.html#6234" class="Function Operator">then</a> <a id="6320" href="slides1.html#6320" class="Bound">x</a> <a id="6322" href="slides1.html#6234" class="Function Operator">else</a> <a id="6327" href="slides1.html#6327" class="Bound">y</a> <a id="6329" class="Symbol">=</a> <a id="6331" href="slides1.html#6320" class="Bound">x</a>
+<pre class="Agda"><a id="if_then_else_"></a><a id="4716" href="slides1.html#4716" class="Function Operator">if_then_else_</a> <a id="4730" class="Symbol">:</a> <a id="4732" class="Symbol">{</a><a id="4733" href="slides1.html#4733" class="Bound">A</a> <a id="4735" class="Symbol">:</a> <a id="4737" href="Agda.Primitive.html#326" class="Primitive">Set</a><a id="4740" class="Symbol">}</a> <a id="4742" class="Symbol">→</a> <a id="4744" href="Agda.Builtin.Bool.html#163" class="Datatype">Bool</a> <a id="4749" class="Symbol">→</a> <a id="4751" href="slides1.html#4733" class="Bound">A</a> <a id="4753" class="Symbol">→</a> <a id="4755" href="slides1.html#4733" class="Bound">A</a> <a id="4757" class="Symbol">→</a> <a id="4759" href="slides1.html#4733" class="Bound">A</a>
+<a id="4761" href="slides1.html#4716" class="Function Operator">if</a> <a id="4764" href="Agda.Builtin.Bool.html#182" class="InductiveConstructor">false</a> <a id="4770" href="slides1.html#4716" class="Function Operator">then</a> <a id="4775" href="slides1.html#4775" class="Bound">x</a> <a id="4777" href="slides1.html#4716" class="Function Operator">else</a> <a id="4782" href="slides1.html#4782" class="Bound">y</a> <a id="4784" class="Symbol">=</a> <a id="4786" href="slides1.html#4782" class="Bound">y</a>
+<a id="4788" href="slides1.html#4716" class="Function Operator">if</a> <a id="4791" href="Agda.Builtin.Bool.html#188" class="InductiveConstructor">true</a>  <a id="4797" href="slides1.html#4716" class="Function Operator">then</a> <a id="4802" href="slides1.html#4802" class="Bound">x</a> <a id="4804" href="slides1.html#4716" class="Function Operator">else</a> <a id="4809" href="slides1.html#4809" class="Bound">y</a> <a id="4811" class="Symbol">=</a> <a id="4813" href="slides1.html#4802" class="Bound">x</a>
 </pre>
 <p><strong>Note:</strong> <code>{A : Set}</code> indicates an <em>implicit argument</em></p>
 </section></section>
 <section><section id="syntax-of-while-language" class="title-slide slide level1"><h1>Syntax of WHILE language</h1></section><section id="abstract-syntax-tree-of-while" class="slide level2">
 <h2>Abstract syntax tree of WHILE</h2>
-<pre class="Agda"><a id="6460" class="Keyword">open</a> <a id="6465" class="Keyword">import</a> <a id="6472" href="Data.Char.html" class="Module">Data.Char</a> <a id="6482" class="Keyword">using</a> <a id="6488" class="Symbol">(</a><a id="6489" href="Agda.Builtin.Char.html#227" class="Postulate">Char</a><a id="6493" class="Symbol">)</a>
-<a id="6495" class="Keyword">open</a> <a id="6500" class="Keyword">import</a> <a id="6507" href="Data.Integer.html" class="Module">Data.Integer</a> <a id="6520" class="Keyword">using</a> <a id="6526" class="Symbol">(</a><a id="6527" href="Agda.Builtin.Int.html#246" class="Datatype">ℤ</a><a id="6528" class="Symbol">)</a>
+<pre class="Agda"><a id="4942" class="Keyword">open</a> <a id="4947" class="Keyword">import</a> <a id="4954" href="Data.Char.html" class="Module">Data.Char</a> <a id="4964" class="Keyword">using</a> <a id="4970" class="Symbol">(</a><a id="4971" href="Agda.Builtin.Char.html#227" class="Postulate">Char</a><a id="4975" class="Symbol">)</a>
+<a id="4977" class="Keyword">open</a> <a id="4982" class="Keyword">import</a> <a id="4989" href="Data.Integer.html" class="Module">Data.Integer</a> <a id="5002" class="Keyword">using</a> <a id="5008" class="Symbol">(</a><a id="5009" href="Agda.Builtin.Int.html#246" class="Datatype">ℤ</a><a id="5010" class="Symbol">)</a>
 
-<a id="6531" class="Keyword">data</a> <a id="Id"></a><a id="6536" href="slides1.html#6536" class="Datatype">Id</a> <a id="6539" class="Symbol">:</a> <a id="6541" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="6545" class="Keyword">where</a>
-  <a id="Id.mkId"></a><a id="6553" href="slides1.html#6553" class="InductiveConstructor">mkId</a> <a id="6558" class="Symbol">:</a> <a id="6560" href="slides1.html#6050" class="Datatype">List</a> <a id="6565" href="Agda.Builtin.Char.html#227" class="Postulate">Char</a> <a id="6570" class="Symbol">→</a> <a id="6572" href="slides1.html#6536" class="Datatype">Id</a>
+<a id="5013" class="Keyword">data</a> <a id="Id"></a><a id="5018" href="slides1.html#5018" class="Datatype">Id</a> <a id="5021" class="Symbol">:</a> <a id="5023" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="5027" class="Keyword">where</a>
+  <a id="Id.mkId"></a><a id="5035" href="slides1.html#5035" class="InductiveConstructor">mkId</a> <a id="5040" class="Symbol">:</a> <a id="5042" href="slides1.html#4532" class="Datatype">List</a> <a id="5047" href="Agda.Builtin.Char.html#227" class="Postulate">Char</a> <a id="5052" class="Symbol">→</a> <a id="5054" href="slides1.html#5018" class="Datatype">Id</a>
 
-<a id="6576" class="Keyword">data</a> <a id="Exp"></a><a id="6581" href="slides1.html#6581" class="Datatype">Exp</a> <a id="6585" class="Symbol">:</a> <a id="6587" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="6591" class="Keyword">where</a>
-  <a id="Exp.eId"></a><a id="6599" href="slides1.html#6599" class="InductiveConstructor">eId</a>       <a id="6609" class="Symbol">:</a> <a id="6611" class="Symbol">(</a><a id="6612" href="slides1.html#6612" class="Bound">x</a> <a id="6614" class="Symbol">:</a> <a id="6616" href="slides1.html#6536" class="Datatype">Id</a><a id="6618" class="Symbol">)</a>      <a id="6625" class="Symbol">→</a> <a id="6627" href="slides1.html#6581" class="Datatype">Exp</a>
-  <a id="Exp.eInt"></a><a id="6633" href="slides1.html#6633" class="InductiveConstructor">eInt</a>      <a id="6643" class="Symbol">:</a> <a id="6645" class="Symbol">(</a><a id="6646" href="slides1.html#6646" class="Bound">i</a> <a id="6648" class="Symbol">:</a> <a id="6650" href="Agda.Builtin.Int.html#246" class="Datatype">ℤ</a><a id="6651" class="Symbol">)</a>       <a id="6659" class="Symbol">→</a> <a id="6661" href="slides1.html#6581" class="Datatype">Exp</a>
-  <a id="Exp.eBool"></a><a id="6667" href="slides1.html#6667" class="InductiveConstructor">eBool</a>     <a id="6677" class="Symbol">:</a> <a id="6679" class="Symbol">(</a><a id="6680" href="slides1.html#6680" class="Bound">b</a> <a id="6682" class="Symbol">:</a> <a id="6684" href="Agda.Builtin.Bool.html#163" class="Datatype">Bool</a><a id="6688" class="Symbol">)</a>    <a id="6693" class="Symbol">→</a> <a id="6695" href="slides1.html#6581" class="Datatype">Exp</a>
-  <a id="Exp.ePlus"></a><a id="6701" href="slides1.html#6701" class="InductiveConstructor">ePlus</a>     <a id="6711" class="Symbol">:</a> <a id="6713" class="Symbol">(</a><a id="6714" href="slides1.html#6714" class="Bound">e</a> <a id="6716" href="slides1.html#6716" class="Bound">e&#39;</a> <a id="6719" class="Symbol">:</a> <a id="6721" href="slides1.html#6581" class="Datatype">Exp</a><a id="6724" class="Symbol">)</a>  <a id="6727" class="Symbol">→</a> <a id="6729" href="slides1.html#6581" class="Datatype">Exp</a>
-  <a id="Exp.eGt"></a><a id="6735" href="slides1.html#6735" class="InductiveConstructor">eGt</a>       <a id="6745" class="Symbol">:</a> <a id="6747" class="Symbol">(</a><a id="6748" href="slides1.html#6748" class="Bound">e</a> <a id="6750" href="slides1.html#6750" class="Bound">e&#39;</a> <a id="6753" class="Symbol">:</a> <a id="6755" href="slides1.html#6581" class="Datatype">Exp</a><a id="6758" class="Symbol">)</a>  <a id="6761" class="Symbol">→</a> <a id="6763" href="slides1.html#6581" class="Datatype">Exp</a>
-  <a id="Exp.eAnd"></a><a id="6769" href="slides1.html#6769" class="InductiveConstructor">eAnd</a>      <a id="6779" class="Symbol">:</a> <a id="6781" class="Symbol">(</a><a id="6782" href="slides1.html#6782" class="Bound">e</a> <a id="6784" href="slides1.html#6784" class="Bound">e&#39;</a> <a id="6787" class="Symbol">:</a> <a id="6789" href="slides1.html#6581" class="Datatype">Exp</a><a id="6792" class="Symbol">)</a>  <a id="6795" class="Symbol">→</a> <a id="6797" href="slides1.html#6581" class="Datatype">Exp</a>
+<a id="5058" class="Keyword">data</a> <a id="Exp"></a><a id="5063" href="slides1.html#5063" class="Datatype">Exp</a> <a id="5067" class="Symbol">:</a> <a id="5069" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="5073" class="Keyword">where</a>
+  <a id="Exp.eId"></a><a id="5081" href="slides1.html#5081" class="InductiveConstructor">eId</a>       <a id="5091" class="Symbol">:</a> <a id="5093" class="Symbol">(</a><a id="5094" href="slides1.html#5094" class="Bound">x</a> <a id="5096" class="Symbol">:</a> <a id="5098" href="slides1.html#5018" class="Datatype">Id</a><a id="5100" class="Symbol">)</a>      <a id="5107" class="Symbol">→</a> <a id="5109" href="slides1.html#5063" class="Datatype">Exp</a>
+  <a id="Exp.eInt"></a><a id="5115" href="slides1.html#5115" class="InductiveConstructor">eInt</a>      <a id="5125" class="Symbol">:</a> <a id="5127" class="Symbol">(</a><a id="5128" href="slides1.html#5128" class="Bound">i</a> <a id="5130" class="Symbol">:</a> <a id="5132" href="Agda.Builtin.Int.html#246" class="Datatype">ℤ</a><a id="5133" class="Symbol">)</a>       <a id="5141" class="Symbol">→</a> <a id="5143" href="slides1.html#5063" class="Datatype">Exp</a>
+  <a id="Exp.eBool"></a><a id="5149" href="slides1.html#5149" class="InductiveConstructor">eBool</a>     <a id="5159" class="Symbol">:</a> <a id="5161" class="Symbol">(</a><a id="5162" href="slides1.html#5162" class="Bound">b</a> <a id="5164" class="Symbol">:</a> <a id="5166" href="Agda.Builtin.Bool.html#163" class="Datatype">Bool</a><a id="5170" class="Symbol">)</a>    <a id="5175" class="Symbol">→</a> <a id="5177" href="slides1.html#5063" class="Datatype">Exp</a>
+  <a id="Exp.ePlus"></a><a id="5183" href="slides1.html#5183" class="InductiveConstructor">ePlus</a>     <a id="5193" class="Symbol">:</a> <a id="5195" class="Symbol">(</a><a id="5196" href="slides1.html#5196" class="Bound">e</a> <a id="5198" href="slides1.html#5198" class="Bound">e&#39;</a> <a id="5201" class="Symbol">:</a> <a id="5203" href="slides1.html#5063" class="Datatype">Exp</a><a id="5206" class="Symbol">)</a>  <a id="5209" class="Symbol">→</a> <a id="5211" href="slides1.html#5063" class="Datatype">Exp</a>
+  <a id="Exp.eGt"></a><a id="5217" href="slides1.html#5217" class="InductiveConstructor">eGt</a>       <a id="5227" class="Symbol">:</a> <a id="5229" class="Symbol">(</a><a id="5230" href="slides1.html#5230" class="Bound">e</a> <a id="5232" href="slides1.html#5232" class="Bound">e&#39;</a> <a id="5235" class="Symbol">:</a> <a id="5237" href="slides1.html#5063" class="Datatype">Exp</a><a id="5240" class="Symbol">)</a>  <a id="5243" class="Symbol">→</a> <a id="5245" href="slides1.html#5063" class="Datatype">Exp</a>
+  <a id="Exp.eAnd"></a><a id="5251" href="slides1.html#5251" class="InductiveConstructor">eAnd</a>      <a id="5261" class="Symbol">:</a> <a id="5263" class="Symbol">(</a><a id="5264" href="slides1.html#5264" class="Bound">e</a> <a id="5266" href="slides1.html#5266" class="Bound">e&#39;</a> <a id="5269" class="Symbol">:</a> <a id="5271" href="slides1.html#5063" class="Datatype">Exp</a><a id="5274" class="Symbol">)</a>  <a id="5277" class="Symbol">→</a> <a id="5279" href="slides1.html#5063" class="Datatype">Exp</a>
 </pre>
 </section><section id="untyped-interpreter" class="slide level2">
 <h2>Untyped interpreter</h2>
-<pre class="Agda"><a id="6834" class="Keyword">data</a> <a id="Val"></a><a id="6839" href="slides1.html#6839" class="Datatype">Val</a> <a id="6843" class="Symbol">:</a> <a id="6845" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="6849" class="Keyword">where</a>
-  <a id="Val.intV"></a><a id="6857" href="slides1.html#6857" class="InductiveConstructor">intV</a>  <a id="6863" class="Symbol">:</a> <a id="6865" href="Agda.Builtin.Int.html#246" class="Datatype">ℤ</a>    <a id="6870" class="Symbol">→</a> <a id="6872" href="slides1.html#6839" class="Datatype">Val</a>
-  <a id="Val.boolV"></a><a id="6878" href="slides1.html#6878" class="InductiveConstructor">boolV</a> <a id="6884" class="Symbol">:</a> <a id="6886" href="Agda.Builtin.Bool.html#163" class="Datatype">Bool</a> <a id="6891" class="Symbol">→</a> <a id="6893" href="slides1.html#6839" class="Datatype">Val</a>
+<pre class="Agda"><a id="5316" class="Keyword">data</a> <a id="Val"></a><a id="5321" href="slides1.html#5321" class="Datatype">Val</a> <a id="5325" class="Symbol">:</a> <a id="5327" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="5331" class="Keyword">where</a>
+  <a id="Val.intV"></a><a id="5339" href="slides1.html#5339" class="InductiveConstructor">intV</a>  <a id="5345" class="Symbol">:</a> <a id="5347" href="Agda.Builtin.Int.html#246" class="Datatype">ℤ</a>    <a id="5352" class="Symbol">→</a> <a id="5354" href="slides1.html#5321" class="Datatype">Val</a>
+  <a id="Val.boolV"></a><a id="5360" href="slides1.html#5360" class="InductiveConstructor">boolV</a> <a id="5366" class="Symbol">:</a> <a id="5368" href="Agda.Builtin.Bool.html#163" class="Datatype">Bool</a> <a id="5373" class="Symbol">→</a> <a id="5375" href="slides1.html#5321" class="Datatype">Val</a>
 
-<a id="eval"></a><a id="6898" href="slides1.html#6898" class="Function">eval</a> <a id="6903" class="Symbol">:</a> <a id="6905" href="slides1.html#6581" class="Datatype">Exp</a> <a id="6909" class="Symbol">→</a> <a id="6911" href="slides1.html#6126" class="Datatype">Maybe</a> <a id="6917" href="slides1.html#6839" class="Datatype">Val</a>
-<a id="6921" href="slides1.html#6898" class="Function">eval</a> <a id="6926" class="Symbol">=</a> <a id="6928" href="slides1.html#1322" class="Postulate">⋯</a>
+<a id="eval"></a><a id="5380" href="slides1.html#5380" class="Function">eval</a> <a id="5385" class="Symbol">:</a> <a id="5387" href="slides1.html#5063" class="Datatype">Exp</a> <a id="5391" class="Symbol">→</a> <a id="5393" href="slides1.html#4608" class="Datatype">Maybe</a> <a id="5399" href="slides1.html#5321" class="Datatype">Val</a>
+<a id="5403" href="slides1.html#5380" class="Function">eval</a> <a id="5408" class="Symbol">=</a> <a id="5410" href="slides1.html#503" class="Postulate">⋯</a>
 </pre>
-<p>See <a href="https://github.com/jespercockx/ohrid19-agda/src/V1/html/V1.UntypedInterpreter.html"><code>V1/UntypedInterpreter.agda</code></a></p>
-</section><section id="exercises" class="slide level2">
-<h2>Exercises</h2>
+<p>See <a href="../src/V1/html/V1.UntypedInterpreter.html"><code>V1/UntypedInterpreter.agda</code></a></p>
+</section><section id="practical-part" class="slide level2">
+<h2>Practical part:</h2>
 <ul>
-<li>Install Agda and download the code with <code>git clone https://github.com/jespercockx/ohrid19-agda</code></li>
-<li>Load the code in Emacs</li>
-<li>Choose a language construct (e.g. <code>~</code> or <code>-</code>) and add it to <code>AST.agda</code> and <code>UntypedInterpreter.agda</code></li>
+<li>Download the code with <code>git clone https://github.com/liesnikov/ohrid19-agda</code></li>
+<li>Load the code in VSCode</li>
+<li>Choose a language construct (e.g. negation <code>~</code> or minus <code>-</code>).<br />
+Add it to <a href="../src/V1/html/V1.AST.html"><code>V1/AST.agda</code></a> and <a href="../src/V1/html/V1.UntypedInterpreter.html"><code>V1/UntypedInterpreter.agda</code></a></li>
 </ul>
-<p>See also <a href="https://jespercockx.github.io/ohrid19-agda/">https://jespercockx.github.io/ohrid19-agda/</a></p>
 </section></section>
     </div>
   </div>
